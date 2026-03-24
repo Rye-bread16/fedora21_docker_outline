@@ -1,0 +1,44 @@
+#Ryan Petit
+#base configured docker-compose for a fedora 21 webmail server, note: does not have functionality, needs a Dockerfile(to build the container).
+#For each service with "FROM fedora:21", swap the "iamge" tag with "build", and the directory of where the Dockerfile is.
+#This docker-compose serves as the foundation for the fedora21 webmail server since we are modeling it off of pre-configured services unknown at the time. This is for learning purposes only.
+
+
+version: '3.8'
+
+volumes:
+  maildir:
+  db_data:
+
+services:
+  
+  webmail:
+    image: fedora:21
+    ports:
+      - 80:80
+    depends_on:
+      - db
+      - smtp
+      - imap
+  
+  smtp:
+    image: fedora:21
+    ports:
+      - 25:25
+    volumes:
+      - maildir:/var/spool/mail
+  
+  imap:
+    iamge: fedora:21
+    ports:
+      - 143:143
+    volumes:
+      - maildir:/var/spool/mail
+  
+  db:
+    image: fedora:21
+    expose:
+      - "3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
